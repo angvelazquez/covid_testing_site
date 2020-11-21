@@ -1,0 +1,15 @@
+SELECT * FROM Employee;
+SELECT * FROM EmployeeTest;
+SELECT * FROM LabEmployee;
+SELECT * FROM Pool;
+SELECT * FROM PoolMap;
+SELECT * FROM Well;
+SELECT * FROM WellTesting;
+
+SELECT employeeID ,email ,firstName,lastName,passcode FROM Employee;
+SELECT testBarcode,employeeID,collectionTime FROM EmployeeTest;
+SELECT labID,password FROM LabEmployee;
+SELECT * FROM Pool;
+SELECT * FROM PoolMap;
+SELECT * FROM Well;
+SELECT * FROM WellTesting;
