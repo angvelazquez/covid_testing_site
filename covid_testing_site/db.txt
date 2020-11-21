@@ -1,0 +1,46 @@
+CREATE TABLE Employee(
+    employeeID VARCHAR(20) PRIMARY KEY,
+    email VARCHAR(50) UNIQUE,
+    firstName VARCHAR(50),
+    lastName VARCHAR(50),
+    passcode VARCHAR(50)
+);
+
+CREATE TABLE LabEmployee(
+    labID VARCHAR(50),
+    password VARCHAR(50)
+);
+
+CREATE TABLE EmployeeTest(
+    testBarcode VARCHAR(50) PRIMARY KEY,
+    employeeID VARCHAR(20) NOT NULL,
+    FOREIGN KEY (employeeID) REFERENCES employee(employeeID),
+    collectionTime DATETIME,
+    collectedBy VARCHAR(50), 
+    FOREIGN KEY (collectedBy) REFERENCES LabEmployee(labID)
+);
+
+CREATE TABLE Pool(
+    poolBarcode VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE PoolMap(
+    testBarCode VARCHAR(50),
+    FOREIGN KEY (testBarCode) REFERENCES EmployeeTest(testBarcode),
+    poolBarcode VARCHAR(50),
+    FOREIGN KEY (poolBarcode) REFERENCES Pool(poolBarcode)
+);
+
+CREATE TABLE Well(
+    wellBarcode VARCHAR(50) PRIMARY KEY
+)
+
+CREATE TABLE WellTesting(
+    poolBarcode VARCHAR(50),
+    FOREIGN KEY (poolBarcode) REFERENCES Pool(poolBarcode),
+    wellBarcode VARCHAR(50),
+    FOREIGN KEY (wellBarcode) REFERENCES Well(wellBarcode),
+    testingStartTime DATETIME,
+    testingEndTime DATETIME,
+    result VARCHAR(20) CHECK (result in ("in progress", "negative", "positive"))
+);
