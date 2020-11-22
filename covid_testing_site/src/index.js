@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+//import App from './App';
+import EmployeeLoginApp from './employeeLogin/EmployeeLoginApp';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <EmployeeLoginApp /> //I changed this to my login page, gotta separate later
   </React.StrictMode>,
   document.getElementById('root')
 );

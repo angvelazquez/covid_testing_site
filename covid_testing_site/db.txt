@@ -1,0 +1,95 @@
+DROP TABLE if exists PoolMap,WellTesting,EmployeeTest,Employee,LabEmployee,Pool,Well;
+
+CREATE TABLE Employee(
+    employeeID VARCHAR(20) PRIMARY KEY,
+    email VARCHAR(50) UNIQUE,
+    firstName VARCHAR(50),
+    lastName VARCHAR(50),
+    passcode VARCHAR(50)
+);
+/*email unique so it's a secondary key*/
+
+CREATE TABLE LabEmployee(
+    labID VARCHAR(50) UNIQUE,
+    password VARCHAR(50)
+);
+/*labID unique so cause it is used for a foreign key? 
+Doesn't compile otherwise*/
+
+CREATE TABLE EmployeeTest(
+    testBarcode VARCHAR(50) PRIMARY KEY,
+    employeeID VARCHAR(20) NOT NULL,
+    FOREIGN KEY (employeeID) REFERENCES employee(employeeID),
+    collectionTime DATETIME,
+    collectedBy VARCHAR(50), 
+    FOREIGN KEY (collectedBy) REFERENCES LabEmployee(labID)
+    , UNIQUE (employeeID,collectionTime)/**/
+    /*Optional Composed Key*/
+);
+
+CREATE TABLE Pool(
+    poolBarcode VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE PoolMap(
+    testBarCode VARCHAR(50),
+    FOREIGN KEY (testBarCode) REFERENCES EmployeeTest(testBarcode),
+    poolBarcode VARCHAR(50),
+    FOREIGN KEY (poolBarcode) REFERENCES Pool(poolBarcode)
+);
+
+CREATE TABLE Well(
+    wellBarcode VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE WellTesting(
+    poolBarcode VARCHAR(50),
+    FOREIGN KEY (poolBarcode) REFERENCES Pool(poolBarcode),
+    wellBarcode VARCHAR(50),
+    FOREIGN KEY (wellBarcode) REFERENCES Well(wellBarcode),
+    testingStartTime DATETIME,
+    testingEndTime DATETIME,
+    result VARCHAR(20) CHECK (result in ("in progress", "negative", "positive"))
+    /*result must be in these 3 possibilities*/
+);
+
+
+
+/*Feel Free to edit the insert statements with whatever you need*/
+INSERT INTO Employee (employeeID ,email ,firstName,lastName,passcode) 
+VALUES 
+    ("1","blah@gmail.com","Boring","Professor","63835"),
+    ("2","chatter@gmail.com","Exciting","Professor","123456"),
+    ("3","pfodor@cs.stonybrook.edu","Paul","Fodor","68306821");
+
+INSERT INTO LabEmployee(labID,password) 
+VALUES 
+    ("L1","foo"),
+    ("L2","bar"),
+    ("L3","tra");
+
+INSERT INTO EmployeeTest(testBarcode,employeeID,collectionTime, collectedBy) 
+VALUES 
+    ("123","1","2020-11-20 11:47:30","L1"),
+    ("234","2","2020-11-20 11:47:30","L2"),
+    ("345","3","2020-11-20 11:47:30","L3");
+
+INSERT INTO Pool(poolBarcode) 
+VALUES ("20"),("40"),("60");
+
+INSERT INTO PoolMap(testBarCode,poolBarcode)
+VALUES 
+    ("123","20"),
+    ("234","40"),
+    ("345","60");
+
+INSERT INTO Well(wellBarcode)
+VALUES ("10"),("100"),("1000");
+
+INSERT INTO WellTesting(poolBarcode,wellBarcode,testingStartTime,testingEndTime,result)
+VALUES 
+    ("20","10","2020-11-18 11:47:30","2020-11-20 11:47:30", "In Progress"),
+    ("40","100","2020-11-18 11:47:30","2020-11-20 11:47:30", "Negative"),
+    ("60","1000","2020-11-18 11:47:30","2020-11-20 11:47:30", "Positive");
+    /*("20","10","2020-11-18 11:47:30","2020-11-20 11:47:30", "In");*/
+    /*For testing the result constraint*/
