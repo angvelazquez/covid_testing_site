@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Employee Login</title>
+    <!--<link rel="stylesheet" href="/CSS/style.css">-->
+    <style>
+    .flex-outer li{
+      height:80px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 30px;
+    }
+    input{
+      width: 80%;
+      height: 40px;
+      border:2px solid black;
+      font-size: 20px;
+    }
+    label{
+      padding-right: 20px;
+    }
+    #loginButton{
+      border: none;
+      background-color: white;
+      border: 1px solid black;
+      width: 10%;
+      height:50px;
+      font-size:20px;
+    }
+    </style>
+  </head>
+  <body>
+    <form class="login" action="" method="post">
+      <ul class="flex-outer">
+        <li>
+          <h1>Employee Login Page for Results</h1>
+        </li>
+        <li>
+          <label for="email">Email:</label>
+          <input type="text" name="email" value="">
+        </li>
+        <li>
+          <label for="password">Password:</label>
+          <input type="text" name="password" value="">
+        </li>
+        <li>
+          <input type="submit" id="loginButton" name="login" value="Login">
+        </li>
+      </ul>
+    </form>
+  </body>
+</html>
