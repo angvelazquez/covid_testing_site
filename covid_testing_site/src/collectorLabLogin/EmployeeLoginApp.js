@@ -1,15 +1,15 @@
 import React, {Component} from "react";
-import "./CSS/employeeLoginStyle.css";
+import "./CSS/loginStyle.css";
 
 
-class EmployeeLoginApp extends Component {
+class LoginApp extends Component {
   constructor(props){
     super(props);
     this.state = {apiResponse: ""};
   }
 
   callAPI(){
-    fetch("http://localhost:9000/employeeLogin")
+    fetch("http://localhost:9000/collectorLabLogin")
       .then(res => res.text())
       .then(res => this.setState({apiResponse: res}))
       .catch(err => err);
@@ -22,9 +22,8 @@ class EmployeeLoginApp extends Component {
   render(){
   return (
       <div dangerouslySetInnerHTML={{__html: this.state.apiResponse}} />
-      // <h1>hello</h1>
   );
 }
 }
 
-export default EmployeeLoginApp;
+export default LoginApp;

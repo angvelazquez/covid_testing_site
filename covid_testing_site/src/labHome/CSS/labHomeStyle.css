@@ -1,0 +1,30 @@
+.form-inline {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.form-inline button {
+  border: none;
+  background-color: white;
+  border: 1px solid black;
+  width: 10%;
+  height: 50px;
+  font-size: 20px;
+  margin-top: 1%;
+}
+
+.form-inline button:hover {
+  background-color: royalblue;
+}
+
+@media (max-width: 10000px) {
+  .form-inline input {
+    margin: 10px 0;
+  }
+
+  .form-inline {
+    flex-direction: column;
+    align-items: center;
+  }
+}
