@@ -1,7 +1,9 @@
 import React, {Component} from "react";
-import EmployeeLoginApp from './EmployeeLoginApp';
-import EmployeeHome from './EmployeeHome';
-
+//import EmployeeLoginApp from './EmployeeLoginApp';
+//import EmployeeHome from './EmployeeHome';
+import {
+  Redirect,
+} from "react-router-dom";
 class TryEmployeeLogin extends Component {
   constructor(props){
     super(props);
@@ -9,11 +11,10 @@ class TryEmployeeLogin extends Component {
   }
 
   callAPI(){
-    //console.log(window.location.href.substring(22));
+    console.log(window.location.href.substring(22));
     fetch('http://localhost:9000/'+window.location.href.substring(22))
       .then(res => res.json())
       .then(members => this.setState({ correct: members }));
-
   }
 
   componentDidMount(){
@@ -21,18 +22,29 @@ class TryEmployeeLogin extends Component {
   }
 
   render(){
-    console.log(this.state);
-    if(this.state.correct!==0){
-      console.log("hee");
-      return (
-        <EmployeeHome></EmployeeHome>
-      );
+    //console.log(this.state.correct[0])
+    if(this.state.correct[0]===undefined){
+      return(<h1>Loading</h1>);
     }
-    else{
-      return(
-        <EmployeeLoginApp></EmployeeLoginApp>
-      );
-    }
+      if(JSON.stringify(this.state.correct[0])!=='{"valid":0}'){
+        return (
+            <Redirect
+            to={{
+              pathname: "/employeeHome",
+              search: window.location.href.substring(28)
+            }}
+            />
+          );
+      }
+      else {
+        return(
+          <Redirect
+          to={{
+            pathname: "/employeeLogin",
+          }}
+          />
+        );
+      }
 }
 }
 
