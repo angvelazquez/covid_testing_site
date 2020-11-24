@@ -7,7 +7,8 @@ class EmployeeHome extends Component {
   }
 
   callAPI(){
-    fetch('http://localhost:9000/employeeHome')
+    //console.log(window.location.href.substring(22));
+    fetch('http://localhost:9000/'+window.location.href.substring(22))
       .then(res => res.json())
       .then(members => this.setState({ members: members }));
     console.log(this.state)

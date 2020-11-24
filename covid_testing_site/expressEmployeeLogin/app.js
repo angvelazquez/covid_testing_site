@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
 var mariadb = require('mariadb');
+var url = require('url');
 require('dotenv').config()
 
 var indexRouter = require('./routes/index');
@@ -28,7 +29,7 @@ pool.getConnection();
 console.log("hmmm");
 //pool.query(`select * from ${table}`)
 //    .then(res => {
-//      console.log(res); 
+//      console.log(JSON.stringify(res));
 //    });
 
 // view engine setup
@@ -46,12 +47,30 @@ app.use('/', indexRouter);
 app.use('/blah', usersRouter);
 app.use('/employeeLogin', employeeLogin);
 app.use('/employeeHome', (req, res) => {
-  
-  pool.query(`select * from ${table}`)
-    .then(blah => {
-      console.log(blah);
-      res.send(blah); 
-    });
+  let query = url.parse(req.url, true).query;
+  console.log(query.email);
+  console.log(query.password);
+  //if(query.email!=null){
+    //if(query.email!='*'){
+      //if(query.password!=null){
+        //if(query.password!='*'){
+        pool.query(`select * from ${table} where email='${query.email}'and passcode ='${query.password}'`)
+        .then(data => {
+          console.log(data);
+          res.send(data);
+        });
+});
+app.use('/login', (req, res) => {
+  let query = url.parse(req.url, true).query;
+  console.log(query.email);
+  console.log(query.password);
+  console.log("help");
+  pool.query(`select count(*) as count from ${table} where email='${query.email}'and passcode ='${query.password}'`)
+      .then(blah => {
+        meep = blah;
+        console.log(meep);
+        res.send(meep);
+      });
 });
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
