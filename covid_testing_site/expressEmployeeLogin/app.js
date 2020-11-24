@@ -54,7 +54,13 @@ app.use('/employeeHome', (req, res) => {
     //if(query.email!='*'){
       //if(query.password!=null){
         //if(query.password!='*'){
-        pool.query(`select * from ${table} where email='${query.email}'and passcode ='${query.password}'`)
+
+        pool.query(`SELECT Distinct Employee.employeeid as id, EmployeeTest.collectionTime as collectionDate, result FROM Employee,EmployeeTest, PoolMap,Pool,WellTesting
+        Where employee.email='${query.email}' and employee.passcode='${query.password}'
+        and employee.employeeid=employeetest.employeeid
+        and employeetest.testbarcode = poolmap.testbarcode
+        and poolmap.poolBarcode = pool.poolBarcode
+        and wellTesting.poolBarcode = pool.poolBarcode;`)
         .then(data => {
           console.log(data);
           res.send(data);
@@ -65,7 +71,7 @@ app.use('/login', (req, res) => {
   console.log(query.email);
   console.log(query.password);
   console.log("help");
-  pool.query(`select count(*) as count from ${table} where email='${query.email}'and passcode ='${query.password}'`)
+  pool.query(`select count(*) as valid from ${table} where email='${query.email}'and passcode ='${query.password}'`)
       .then(blah => {
         meep = blah;
         console.log(meep);
