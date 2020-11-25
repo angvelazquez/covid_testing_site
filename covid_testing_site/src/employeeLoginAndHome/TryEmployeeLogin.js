@@ -40,7 +40,7 @@ class TryEmployeeLogin extends Component {
         return(
           <Redirect
           to={{
-            pathname: "/employeeLogin",
+            pathname: "/employee",
           }}
           />
         );
