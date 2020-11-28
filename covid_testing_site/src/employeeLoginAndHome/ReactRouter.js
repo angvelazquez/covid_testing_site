@@ -1,6 +1,7 @@
 import React from "react";
 import EmployeeLoginApp from './EmployeeLoginApp';
 import EmployeeHome from './EmployeeHome';
+import TryEmployeeLogin from './TryEmployeeLogin';
 import {
   BrowserRouter as Router,
   Switch,
@@ -18,6 +19,7 @@ import {
 // work properly.
 
 export default function BasicExample() {
+  console.log(window.location.href);
   return (
     <Router>
       <div>
@@ -34,6 +36,9 @@ export default function BasicExample() {
           </Route>
           <Route path="/EmployeeHome">
             <EmployeeHomePage />
+          </Route>
+          <Route path="/login">
+            <TryEmployeeLoginPage />
           </Route>
           <Route path="/">
             <Dashboard />
@@ -54,8 +59,16 @@ function EmployeeLoginPage() {
 }
 
 function EmployeeHomePage() {
+  console.log("hello");
   return (
     <EmployeeHome></EmployeeHome>
+  );
+}
+
+function TryEmployeeLoginPage() {
+  console.log("helo");
+  return (
+    <TryEmployeeLogin></TryEmployeeLogin>
   );
 }
 

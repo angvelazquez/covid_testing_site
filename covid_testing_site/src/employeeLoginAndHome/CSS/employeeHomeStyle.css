@@ -1,0 +1,14 @@
+.Center{
+    display: flex;
+    justify-Content: center;
+    align-Items: center;
+}
+.tableBorder{
+    border: 1px solid black;
+     width:80%;
+}
+.cellBorder{
+    border: 1px solid black;
+    width:50%;
+    height:40px;
+}
