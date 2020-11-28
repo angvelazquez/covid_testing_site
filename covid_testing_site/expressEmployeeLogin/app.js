@@ -1,5 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
+var session = require('express-session');
+var bodyParser = require('body-parser')
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -17,13 +19,19 @@ var app = express();
 var table = 'Employee';
 
 var pool = mariadb.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PWD,
-  database: process.env.DB_DB,
-  port: process.env.DB_PORT,
-  connectionLimit:5
+  host: "localhost",
+  port: 3306,
+  user: "root",
+  password: "cse316newpass",
+  database: "covid",
 });
+
+// host: process.env.DB_HOST,
+  // user: process.env.DB_USER,
+  // password: process.env.DB_PWD,
+  // database: process.env.DB_DB,
+  // port: process.env.DB_PORT,
+  // connectionLimit:5
 
 pool.getConnection();
 
@@ -68,6 +76,64 @@ app.use('/employeeHome', (req, res) => {
           res.send(data);
         });
 });
+// Basic Login Request
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.post('/auth', (req, res) => {
+  let email = req.body.email;
+  let password = req.body.pswd;
+  if(email && password)
+  {
+    pool.query('SELECT * FROM Employee WHERE email = ? AND passcode = ?', [email, password], (error, results, fields) => {
+      if(results.length > 0)
+      {
+        req.session.loggedin = true;
+        req.session.email = email;
+        res.redirect('/home'); // Need to edit this line to route to collector
+      }
+      else if(email && password)
+      {
+          pool.query('SELECT * FROM LabEmployee WHERE labID = ? AND password = ?', [email, password], (error, results, fields) => {
+          if(results.length > 0)
+          {
+            req.session.loggedin = true;
+            req.session.email = email;
+            res.redirect('/home'); // Need to edit this line to route to lab home
+          }
+          else
+          {
+            res.send('Incorrect Username and/or Password!');
+          }
+        })
+      }
+      else 
+      {
+        res.send('Incorrect Username and/or Password!');
+      }
+      res.end();
+    })
+  }
+});
+
+app.get('/home', function(request, response) {
+	if (request.session.loggedin) {
+		response.send('Welcome back, ' + request.session.username + '!');
+	} else {
+		response.send('Please login to view this page!');
+	}
+	response.end();
+});
+// End of basic login request
+
 app.use('/login', (req, res) => {
   let query = url.parse(req.url, true).query;
   console.log(query.email);
