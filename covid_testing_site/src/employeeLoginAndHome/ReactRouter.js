@@ -2,6 +2,10 @@ import React from "react";
 import EmployeeLoginApp from './EmployeeLoginApp';
 import EmployeeHome from './EmployeeHome';
 import TryEmployeeLogin from './TryEmployeeLogin';
+import WellTesting from '../wellTesting/WellTesting';
+import WellAdd from '../wellTesting/WellAdd';
+import LabLogin from '../wellTesting/LabLogin';
+import EditOrDeleteWell from '../wellTesting/EditOrDeleteWell';
 import {
   BrowserRouter as Router,
   Switch,
@@ -31,14 +35,27 @@ export default function BasicExample() {
           of them to render at a time
         */}
         <Switch>
-          <Route exact path="/EmployeeLogin">
+          <Route exact path="/employee">
             <EmployeeLoginPage />
+          </Route>
+          <Route exact path="/labtech">
+            <LabLoginPage />
           </Route>
           <Route path="/EmployeeHome">
             <EmployeeHomePage />
           </Route>
           <Route path="/login">
             <TryEmployeeLoginPage />
+          </Route>
+          <Route path="/WellTest">
+            <WellTestPage />
+          </Route>
+          <Route path="/addWell">
+            <WellAddPage />
+          </Route>
+
+          <Route path="/editOrDelete">
+            <EditOrDeleteWellPage />
           </Route>
           <Route path="/">
             <Dashboard />
@@ -58,6 +75,12 @@ function EmployeeLoginPage() {
   );
 }
 
+function LabLoginPage() {
+  return (
+    <LabLogin></LabLogin>
+  );
+}
+
 function EmployeeHomePage() {
   console.log("hello");
   return (
@@ -69,6 +92,25 @@ function TryEmployeeLoginPage() {
   console.log("helo");
   return (
     <TryEmployeeLogin></TryEmployeeLogin>
+  );
+}
+
+function WellTestPage() {
+  console.log("helo");
+  return (
+    <WellTesting></WellTesting>
+  );
+}
+
+function WellAddPage() {
+  return (
+    <WellAdd></WellAdd>
+  );
+}
+
+function EditOrDeleteWellPage() {
+  return (
+    <EditOrDeleteWell></EditOrDeleteWell>
   );
 }
 
