@@ -238,6 +238,73 @@ app.use("/editOrDelete", (req, res) => {
 
   //delete in either case
 });
+app.use('/testCollection', (req, res) => {
+  let query = url.parse(req.url, true).query;
+  pool.query(`SELECT employeeID as EmployeeID, testBarcode as TestBarcode from EmployeeTest`) 
+      .then(blah => {
+        meep = blah;
+        console.log(meep);
+        res.send(meep);
+      });
+});
+
+app.use('/addTest', (req, res) => {
+  let query = url.parse(req.url, true).query;
+  console.log(query.employeeID);
+  console.log(query.testBarcode);
+  var x = new Date();
+  var y='';
+  y+=x.getFullYear()+"-"+x.getMonth()+"-"+x.getDay()+" "+x.getHours()+":"+x.getMinutes()+":"+x.getSeconds()
+  //addwell check for action?
+  pool.query(`INSERT INTO EmployeeTest (testBarcode, employeeID, collectionTime, collectedBy) 
+  values ("${query.testBarcode}","${query.employeeID}","${y}","L1")`)
+      .then(blah => {
+        meep = blah;
+        console.log(meep);
+        res.send(meep);
+      });
+});
+
+app.use('/deleteTest', (req, res) => {
+  let query = url.parse(req.url, true).query;
+
+  var x = query.IdBarcode
+  console.log(x)
+  if(x == null){
+    res.send([]);
+  }
+  console.log(typeof query.IdBarcode)
+  console.log(query.action)
+  if(typeof query.IdBarcode == "object"){
+    console.log("uhh")
+    x=x[0];
+    console.log(x)
+  }
+  x=x.split(',');
+  console.log(x)
+
+///////////
+  if(typeof query.IdBarcode == "object"){
+      var x = query.IdBarcode
+      for(i=0; i<x.length;i++){
+        y=x[i].split(',')
+        console.log(y)
+        pool.query(`DELETE FROM EmployeeTest
+    WHERE employeeID='${y[0]}'
+    AND testBarcode='${y[1]}'`)
+    }
+    
+    }
+    else{
+      console.log("asdsad")
+      pool.query(`DELETE FROM EmployeeTest
+    WHERE employeeID='${x[0]}'
+    AND testBarcode='${x[1]}'`)
+    }
+    
+    res.send([]);
+///////////
+});
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
