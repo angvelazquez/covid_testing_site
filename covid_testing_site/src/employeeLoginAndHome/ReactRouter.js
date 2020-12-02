@@ -37,6 +37,12 @@ export default function BasicExample() {
           <Route path="/EmployeeHome">
             <EmployeeHomePage />
           </Route>
+          <Route path="/collectLabLogin">
+            <LoginApp />
+          </Route>
+          <Route path="/labHomeButtons">
+            <LabHomeApp />
+          </Route>
           <Route path="/login">
             <TryEmployeeLoginPage />
           </Route>

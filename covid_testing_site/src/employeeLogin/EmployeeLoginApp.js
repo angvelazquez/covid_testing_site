@@ -1,30 +1,29 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import "./CSS/employeeLoginStyle.css";
 
-
 class EmployeeLoginApp extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {apiResponse: ""};
+    this.state = { apiResponse: "" };
   }
 
-  callAPI(){
-    fetch("http://localhost:9000/employeeLogin")
-      .then(res => res.text())
-      .then(res => this.setState({apiResponse: res}))
-      .catch(err => err);
+  callAPI() {
+    fetch("http://localhost:3000/employeeLogin")
+      .then((res) => res.text())
+      .then((res) => this.setState({ apiResponse: res }))
+      .catch((err) => err);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.callAPI();
   }
 
-  render(){
-  return (
-      <div dangerouslySetInnerHTML={{__html: this.state.apiResponse}} />
+  render() {
+    return (
+      <div dangerouslySetInnerHTML={{ __html: this.state.apiResponse }} />
       // <h1>hello</h1>
-  );
-}
+    );
+  }
 }
 
 export default EmployeeLoginApp;

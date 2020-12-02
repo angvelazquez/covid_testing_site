@@ -4,6 +4,7 @@ import EmployeeHome from './EmployeeHome';
 import LoginApp from '../collectorLabLogin/LoginApp'
 import WellTesting from '../wellTesting/WellTesting';
 import LabHomeApp from '../labHome/LabHomeApp';
+import TryEmployeeLoginPage from '../employeeLoginAndHome/TryEmployeeLogin';
 import {
   BrowserRouter as Router,
   Switch,
@@ -38,11 +39,14 @@ export default function BasicExample() {
           <Route path="/EmployeeHome">
             <EmployeeHomePage />
           </Route>
-          <Route path="/CollectLabLogin">
+          <Route path="/collectLabLogin">
             <LoginApp />
           </Route>
-          <Route path="/LabHome">
+          <Route path="/labHomeButtons">
             <LabHomeApp />
+          </Route>
+          <Route path="/login">
+            <TryEmployeeLoginPage />
           </Route>
           <Route path="/">
             <Dashboard />
