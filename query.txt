@@ -1,0 +1,37 @@
+SELECT * FROM Employee;
+SELECT * FROM EmployeeTest;
+SELECT * FROM LabEmployee;
+SELECT * FROM Pool;
+SELECT * FROM PoolMap;
+SELECT * FROM Well;
+SELECT * FROM WellTesting;
+
+SELECT employeeID ,email ,firstName,lastName,passcode FROM Employee;
+SELECT testBarcode,employeeID,collectionTime FROM EmployeeTest;
+SELECT labID,password FROM LabEmployee;
+SELECT * FROM Pool;
+SELECT * FROM PoolMap;
+SELECT * FROM Well;
+SELECT * FROM WellTesting;
+
+
+The EmployeeHome Query. 
+SELECT Distinct Employee.employeeid as id, EmployeeTest.collectionTime, result FROM Employee,EmployeeTest, PoolMap,Pool,WellTesting 
+Where employee.email="blah@gmail.com" and employee.passcode="63835"
+and employee.employeeid=employeetest.employeeid
+and employeetest.testbarcode = poolmap.testbarcode
+and poolmap.poolBarcode = pool.poolBarcode
+and wellTesting.poolBarcode = pool.poolBarcode;
+
+The WellTesting Query,
+SELECT Distinct WellTesting.poolBarcode as PoolBarcode, WellTesting.wellBarcode as WellBarcode, WellTesting.result FROM LabEmployee,EmployeeTest, PoolMap,Pool,WellTesting 
+Where labemployee.labid="L1" and labemployee.password="foo"
+and labemployee.labid=employeetest.collectedBy
+and employeetest.testbarcode = poolmap.testbarcode
+and poolmap.poolBarcode = pool.poolBarcode
+and wellTesting.poolBarcode = pool.poolBarcode;
+
+SELECT Distinct WellTesting.wellBarcode as WellBarcode, WellTesting.poolBarcode as PoolBarcode, WellTesting.result FROM WellTesting
+  WHERE wellBarcode='${x[0]}'
+  AND poolBarcode='${x[1]}'
+  AND result='${x[2]}'
