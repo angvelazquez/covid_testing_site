@@ -7,7 +7,7 @@ class EmployeeHome extends Component {
   }
 
   callAPI(){
-    fetch('http://localhost:3000/employeeHome')
+    fetch('http://localhost:9000/employeeHome')
       .then(res => res.json())
       .then(members => this.setState({ members: members }));
     console.log(this.state)

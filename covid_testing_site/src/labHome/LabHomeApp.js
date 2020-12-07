@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./CSS/labHomeStyle.css";
+import './labHomeStyle.css'
 import { Redirect } from "react-router-dom";
 
 class LabHomeApp extends Component {
@@ -9,7 +9,7 @@ class LabHomeApp extends Component {
   }
 
   callAPI() {
-    fetch("http://localhost:3000/labHomeButtons")
+    fetch("http://localhost:9000/labHomeButtons")
       .then((res) => res.text())
       .then((res) => this.setState({ apiResponse: res }))
       .catch((err) => err);

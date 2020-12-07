@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 //import App from './App';
-import ReactRouting from './employeeLogin/ReactRouter';
+import ReactRouting from './employeeLoginAndHome/ReactRouter.js';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(

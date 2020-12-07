@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./CSS/loginStyle.css";
+import './loginStyle.css'
 
 class LoginApp extends Component {
   constructor(props) {
@@ -8,7 +8,7 @@ class LoginApp extends Component {
   }
 
   callAPI(){
-    fetch("http://localhost:3000/collectLabLogin")
+    fetch("http://localhost:9000/collectLabLogin")
       .then(res => res.text())
       .then(res => this.setState({apiResponse: res}))
       .catch(err => err);

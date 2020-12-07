@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./CSS/employeeLoginStyle.css";
+import "./CSS/employeeHomeStyle.css";
 
 class EmployeeLoginApp extends Component {
   constructor(props) {
@@ -8,7 +8,7 @@ class EmployeeLoginApp extends Component {
   }
 
   callAPI() {
-    fetch("http://localhost:3000/employeeLogin")
+    fetch("http://localhost:9000/employeeLogin")
       .then((res) => res.text())
       .then((res) => this.setState({ apiResponse: res }))
       .catch((err) => err);

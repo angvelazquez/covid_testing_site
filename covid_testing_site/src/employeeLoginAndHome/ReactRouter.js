@@ -4,14 +4,21 @@ import EmployeeHome from './EmployeeHome';
 import TryEmployeeLogin from './TryEmployeeLogin';
 import WellTesting from '../wellTesting/WellTesting';
 import WellAdd from '../wellTesting/WellAdd';
-import LabLogin from '../wellTesting/LabLogin';
+import LoginApp from '../collectorLabLogin/LoginApp';
+import LabHomeApp from '../labHome/LabHomeApp';
+import TryLoginPage from '../collectorLabLogin/TryLabLogin';
+import TestCollection from '../testCollection/TestCollection';
+import poolMappingApp from "../poolMapping/PoolMappingApp";
+
 import EditOrDeleteWell from '../wellTesting/EditOrDeleteWell';
+import TryLabLogin from '../collectorLabLogin/TryLabLogin';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link
 } from "react-router-dom";
+import PoolMappingApp from "../poolMapping/PoolMappingApp";
 //npm install react-router-dom  was used.
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
@@ -38,17 +45,20 @@ export default function BasicExample() {
           <Route exact path="/employee">
             <EmployeeLoginPage />
           </Route>
-          <Route exact path="/labtech">
-            <LabLoginPage />
+          <Route path="/poolMapping">
+            <PoolMappingPage />
           </Route>
           <Route path="/EmployeeHome">
             <EmployeeHomePage />
           </Route>
-          <Route path="/collectLabLogin">
-            <LoginApp />
+          <Route exact path="/collectLabLogin">
+            <LoginPage />
           </Route>
           <Route path="/labHomeButtons">
-            <LabHomeApp />
+            <LabHomePage />
+          </Route>
+          <Route path="/mainLogin">
+            <TryLoginAppPage />
           </Route>
           <Route path="/login">
             <TryEmployeeLoginPage />
@@ -59,9 +69,11 @@ export default function BasicExample() {
           <Route path="/addWell">
             <WellAddPage />
           </Route>
-
           <Route path="/editOrDelete">
             <EditOrDeleteWellPage />
+          </Route>
+          <Route path="/testCollection">
+            <TestCollectionPage />          
           </Route>
           <Route path="/">
             <Dashboard />
@@ -81,9 +93,27 @@ function EmployeeLoginPage() {
   );
 }
 
-function LabLoginPage() {
+function LoginPage() {
   return (
-    <LabLogin></LabLogin>
+    <LoginApp></LoginApp>
+  );
+}
+
+function LabHomePage() {
+  return (
+    <LabHomeApp></LabHomeApp>
+  );
+}
+
+function TryLoginAppPage() {
+  return (
+    <TryLabLogin></TryLabLogin>
+  );
+}
+
+function PoolMappingPage() {
+  return (
+    <PoolMappingApp></PoolMappingApp>
   );
 }
 
@@ -92,6 +122,10 @@ function EmployeeHomePage() {
   return (
     <EmployeeHome></EmployeeHome>
   );
+}
+
+function TestCollectionPage() {  
+  return (    <TestCollection></TestCollection>  );
 }
 
 function TryEmployeeLoginPage() {

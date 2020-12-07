@@ -8,9 +8,9 @@ var logger = require("morgan");
 var cors = require("cors");
 var mysql = require("mysql");
 var url = require("url");
+var checkAuth = require("./controllers/check-auth");
 var dotenv = require("dotenv");
-
-dotenv.config({ path: "./.env" });
+dotenv.config({ path:  __dirname + '/.env' });
 
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
@@ -25,11 +25,12 @@ var table = "Employee";
 // createPool
 var pool = mysql.createConnection({
   host: process.env.DATABASE_HOST,
-  port: process.env.DATABASE_PORT,
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE,
+  port: process.env.DATABASE_PORT,
+  multipleStatements: true
   // connectionLimit: process.env.DATABASE_CONNECTIONLIMIT,
-  database: process.env.DATABASE
 });
 
 // pool.getConnection((err, connection) => {
@@ -76,7 +77,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/auth", require("./routes/auth"))
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "/styles")));
 
 // app.use('/', indexRouter);
 // app.use('/blah', usersRouter);
@@ -93,6 +94,7 @@ app.use("/employeeHome", (req, res) => {
   //if(query.password!=null){
   //if(query.password!='*'){
 
+  var ans;
   pool
     .query(
       `SELECT Distinct Employee.employeeid as id, EmployeeTest.collectionTime as collectionDate, result FROM Employee,EmployeeTest, PoolMap,Pool,WellTesting 
@@ -100,12 +102,15 @@ app.use("/employeeHome", (req, res) => {
         and employee.employeeid=employeetest.employeeid
         and employeetest.testbarcode = poolmap.testbarcode
         and poolmap.poolBarcode = pool.poolBarcode
-        and wellTesting.poolBarcode = pool.poolBarcode;`
-    )
-    .then((data) => {
-      console.log(data);
+        and wellTesting.poolBarcode = pool.poolBarcode;`,
+    (error, data, fields) => {
+      ans = data;
       res.send(data);
-    });
+    })
+});
+
+app.use("/mainLogin", (req, res) => {
+  res.send([]);
 });
 
 app.use("/login", (req, res) => {
@@ -116,12 +121,11 @@ app.use("/login", (req, res) => {
   pool
     .query(
       `select count(*) as valid from ${table} where email='${query.email}'and passcode ='${query.password}'`
-    )
-    .then((blah) => {
+    , (error, blah, fields) => {
       meep = blah;
       console.log("meep: " + meep);
       res.send(meep);
-    });
+    })
 });
 
 app.use("/loginLab", (req, res) => {
@@ -131,13 +135,12 @@ app.use("/loginLab", (req, res) => {
   console.log("help");
   pool
     .query(
-      `select count(*) as valid from LabEmployee where labID='${query.labid}'and password ='${query.password}'`
-    )
-    .then((blah) => {
-      meep = blah;
+      `select count(*) as valid from LabEmployee where labID='${query.labid}'and password ='${query.password}'`,
+      (error, blah, fields) => {
+        meep = blah;
       console.log(meep);
       res.send(meep);
-    });
+      });
 });
 
 app.use("/wellTest", (req, res) => {
@@ -145,12 +148,11 @@ app.use("/wellTest", (req, res) => {
   console.log(query);
   pool
     .query(
-      `SELECT Distinct WellTesting.poolBarcode as PoolBarcode, WellTesting.wellBarcode as WellBarcode, WellTesting.result FROM WellTesting`
-    )
-    .then((data) => {
-      console.log(data);
-      res.send(data);
-    });
+      `SELECT Distinct WellTesting.poolBarcode as PoolBarcode, WellTesting.wellBarcode as WellBarcode, WellTesting.result FROM WellTesting`,
+      (error, data, fields) => {
+        console.log(data);
+        res.send(data);
+      })
 });
 
 app.use("/addWell", (req, res) => {
@@ -165,13 +167,12 @@ app.use("/addWell", (req, res) => {
   pool
     .query(
       `INSERT INTO WellTesting (poolBarcode, wellBarcode, testingStartTime, testingEndTime, result) 
-  values ("${query.poolBarcode}","${query.wellBarcode}","2020-11-18 11:47:30", "2020-11-25 11:47:30","${query.result}")`
-    )
-    .then((blah) => {
-      meep = blah;
+  values ("${query.poolBarcode}","${query.wellBarcode}","2020-11-18 11:47:30", "2020-11-25 11:47:30","${query.result}")`,
+  (error, data, fields) => {
+    meep = blah;
       console.log(meep);
       res.send(meep);
-    });
+  });
 });
 
 app.use("/editOrDelete", (req, res) => {
@@ -202,8 +203,7 @@ app.use("/editOrDelete", (req, res) => {
   WHERE wellBarcode='${x[0]}'
   AND poolBarcode='${x[1]}'
   AND result='${x[2]}'`
-      )
-      .then((blah) => {
+      , (error, data, fields) => {
         meep = blah;
         console.log(meep);
         if (typeof query.WellPoolResult == "string") {
@@ -240,12 +240,12 @@ app.use("/editOrDelete", (req, res) => {
 });
 app.use('/testCollection', (req, res) => {
   let query = url.parse(req.url, true).query;
-  pool.query(`SELECT employeeID as EmployeeID, testBarcode as TestBarcode from EmployeeTest`) 
-      .then(blah => {
-        meep = blah;
-        console.log(meep);
-        res.send(meep);
-      });
+  pool.query(`SELECT employeeID as EmployeeID, testBarcode as TestBarcode from EmployeeTest`,
+  (error, blah, fields) => {
+    meep = blah;
+    console.log(meep);
+    res.send(meep);
+  });
 });
 
 app.use('/addTest', (req, res) => {
@@ -257,12 +257,12 @@ app.use('/addTest', (req, res) => {
   y+=x.getFullYear()+"-"+x.getMonth()+"-"+x.getDay()+" "+x.getHours()+":"+x.getMinutes()+":"+x.getSeconds()
   //addwell check for action?
   pool.query(`INSERT INTO EmployeeTest (testBarcode, employeeID, collectionTime, collectedBy) 
-  values ("${query.testBarcode}","${query.employeeID}","${y}","L1")`)
-      .then(blah => {
-        meep = blah;
-        console.log(meep);
-        res.send(meep);
-      });
+  values ("${query.testBarcode}","${query.employeeID}","${y}","L1")`,
+  (error, blah, fields) => {
+    meep = blah;
+    console.log(meep);
+    res.send(meep);
+  });
 });
 
 app.use('/deleteTest', (req, res) => {
@@ -321,5 +321,4 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-app.listen(3000)
 module.exports = app;

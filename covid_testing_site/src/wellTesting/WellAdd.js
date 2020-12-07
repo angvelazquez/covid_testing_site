@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import "./CSS/wellAddStyle.css";
+import "./CSS/wellTestStyle.css";
 import {
     Redirect,
   } from "react-router-dom";
