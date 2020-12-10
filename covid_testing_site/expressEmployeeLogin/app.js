@@ -8,10 +8,10 @@ var mariadb = require('mariadb');
 var url = require('url');
 require('dotenv').config()
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+//var indexRouter = require('./routes/index');
+//var usersRouter = require('./routes/users');
 var employeeLogin = require("./routes/employeeLogin");
-var labLogin = require("./routes/labLogin");
+//var labLogin = require("./routes/labLogin");
 
 var app = express();
 var table = 'Employee';
@@ -27,7 +27,7 @@ var pool = mariadb.createPool({
 
 pool.getConnection();
 
-console.log("hmmm");
+//console.log("hmmm");
 //pool.query(`select * from ${table}`)
 //    .then(res => {
 //      console.log(JSON.stringify(res));
@@ -44,19 +44,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/blah', usersRouter);
+//app.use('/', indexRouter);
 app.use('/employeeLogin', employeeLogin);
-app.use('/labLogin', labLogin);
 app.use('/employeeHome', (req, res) => {
   let query = url.parse(req.url, true).query;
-  console.log(query.email);
-  console.log(query.password);
+  //console.log(query.email);
+  //console.log(query.password);
   //if(query.email!=null){
     //if(query.email!='*'){
       //if(query.password!=null){
         //if(query.password!='*'){
-          
         pool.query(`SELECT Distinct Employee.employeeid as id, EmployeeTest.collectionTime as collectionDate, result FROM Employee,EmployeeTest, PoolMap,Pool,WellTesting 
         Where employee.email='${query.email}' and employee.passcode='${query.password}'
         and employee.employeeid=employeetest.employeeid
@@ -64,52 +61,52 @@ app.use('/employeeHome', (req, res) => {
         and poolmap.poolBarcode = pool.poolBarcode
         and wellTesting.poolBarcode = pool.poolBarcode;`)
         .then(data => {
-          console.log(data);
+          //console.log(data);
           res.send(data);
         });
 });
 app.use('/login', (req, res) => {
   let query = url.parse(req.url, true).query;
-  console.log(query.email);
-  console.log(query.password);
-  console.log("help");
+  //console.log(query.email);
+  //console.log(query.password);
+  //console.log("help");
   pool.query(`select count(*) as valid from ${table} where email='${query.email}'and passcode ='${query.password}'`)
       .then(blah => {
         meep = blah;
-        console.log(meep);
+        //console.log(meep);
         res.send(meep);
       });
 });
 
 app.use('/loginLab', (req, res) => {
   let query = url.parse(req.url, true).query;
-  console.log(query.labid);
-  console.log(query.password);
-  console.log("help");
+  //console.log(query.labid);
+  //console.log(query.password);
+  //console.log("help");
   pool.query(`select count(*) as valid from LabEmployee where labID='${query.labid}'and password ='${query.password}'`)
       .then(blah => {
         meep = blah;
-        console.log(meep);
+        //console.log(meep);
         res.send(meep);
       });
 });
 
 app.use('/wellTest', (req, res) => {
   let query = url.parse(req.url, true).query;
-  console.log(query);
+  //console.log(query);
   pool.query(`SELECT Distinct WellTesting.poolBarcode as PoolBarcode, WellTesting.wellBarcode as WellBarcode, WellTesting.result FROM WellTesting`)
   .then(data => {
-    console.log(data);
+    //console.log(data);
     res.send(data);
   });
 });
 
 app.use('/addWell', (req, res) => {
   let query = url.parse(req.url, true).query;
-  console.log(query.wellBarcode);
-  console.log(query.action);
+  //console.log(query.wellBarcode);
+  //console.log(query.action);
   //addwell check for action?
-  console.log(query.result);
+  //console.log(query.result);
   if(query.result==="In+Progress"){
     query.result = "In Progress"
   }
@@ -117,7 +114,7 @@ app.use('/addWell', (req, res) => {
   values ("${query.poolBarcode}","${query.wellBarcode}","2020-11-18 11:47:30", "2020-11-25 11:47:30","${query.result}")`)
       .then(blah => {
         meep = blah;
-        console.log(meep);
+        //console.log(meep);
         res.send(meep);
       });
     });
@@ -132,34 +129,35 @@ app.use('/editOrDelete', (req, res) => {
   }
 
   var x = query.WellPoolResult
-  console.log(x)
-  console.log(typeof query.WellPoolResult)
-  console.log(query.action)
+  //console.log(x)
+  //console.log(typeof query.WellPoolResult)
+  //console.log(query.action)
   if(typeof query.WellPoolResult == "object"){
-    console.log("uhh")
+    //console.log("uhh")
     x=x[0];
-    console.log(x)
+    //console.log(x)
     
   }
   x=x.split(',');
-  console.log(x)
+  //console.log(x)
   //if edit then send back the info as well
   if(query.action=="Edit"){
-    
-    
-  pool.query(`SELECT Distinct WellTesting.wellBarcode as WellBarcode, WellTesting.poolBarcode as PoolBarcode, WellTesting.result FROM WellTesting
+    pool.query(`SELECT Distinct WellTesting.wellBarcode as WellBarcode, WellTesting.poolBarcode as PoolBarcode, WellTesting.result FROM WellTesting
   WHERE wellBarcode='${x[0]}'
   AND poolBarcode='${x[1]}'
-  AND result='${x[2]}'`)
+  AND result='${x[2]}' ORDER BY wellBarcode`)
   .then(blah => {
     meep = blah;
-    console.log(meep);
-    if(typeof query.WellPoolResult == "string"){
+    //console.log(meep);
+    //
+    if(1==1){
       pool.query(`DELETE FROM WellTesting
   WHERE wellBarcode='${x[0]}'
   AND poolBarcode='${x[1]}'
   AND result='${x[2]}'`)
     }
+    //console.log(meep);
+    //console.log("hello")
     res.send(meep);
   });
   }
@@ -168,7 +166,7 @@ app.use('/editOrDelete', (req, res) => {
       var x = query.WellPoolResult
       for(i=0; i<x.length;i++){
         y=x[i].split(',')
-        console.log(y)
+        //console.log(y)
         pool.query(`DELETE FROM WellTesting
     WHERE wellBarcode='${y[0]}'
     AND poolBarcode='${y[1]}'
@@ -177,7 +175,7 @@ app.use('/editOrDelete', (req, res) => {
     
     }
     else{
-      console.log("asdsad")
+      //console.log("asdsad")
       pool.query(`DELETE FROM WellTesting
     WHERE wellBarcode='${x[0]}'
     AND poolBarcode='${x[1]}'
@@ -195,15 +193,15 @@ app.use('/testCollection', (req, res) => {
   pool.query(`SELECT employeeID as EmployeeID, testBarcode as TestBarcode from EmployeeTest`) 
       .then(blah => {
         meep = blah;
-        console.log(meep);
+        //console.log(meep);
         res.send(meep);
       });
 });
 
 app.use('/addTest', (req, res) => {
   let query = url.parse(req.url, true).query;
-  console.log(query.employeeID);
-  console.log(query.testBarcode);
+  //console.log(query.employeeID);
+  //console.log(query.testBarcode);
   var x = new Date();
   var y='';
   y+=x.getFullYear()+"-"+x.getMonth()+"-"+x.getDay()+" "+x.getHours()+":"+x.getMinutes()+":"+x.getSeconds()
@@ -212,7 +210,7 @@ app.use('/addTest', (req, res) => {
   values ("${query.testBarcode}","${query.employeeID}","${y}","L1")`)
       .then(blah => {
         meep = blah;
-        console.log(meep);
+        //console.log(meep);
         res.send(meep);
       });
 });
@@ -221,26 +219,26 @@ app.use('/deleteTest', (req, res) => {
   let query = url.parse(req.url, true).query;
 
   var x = query.IdBarcode
-  console.log(x)
+  //console.log(x)
   if(x == null){
     res.send([]);
   }
-  console.log(typeof query.IdBarcode)
-  console.log(query.action)
+  //console.log(typeof query.IdBarcode)
+  //console.log(query.action)
   if(typeof query.IdBarcode == "object"){
-    console.log("uhh")
+    //console.log("uhh")
     x=x[0];
-    console.log(x)
+    //console.log(x)
   }
   x=x.split(',');
-  console.log(x)
+  //console.log(x)
 
 ///////////
   if(typeof query.IdBarcode == "object"){
       var x = query.IdBarcode
       for(i=0; i<x.length;i++){
         y=x[i].split(',')
-        console.log(y)
+        //console.log(y)
         pool.query(`DELETE FROM EmployeeTest
     WHERE employeeID='${y[0]}'
     AND testBarcode='${y[1]}'`)
@@ -248,7 +246,7 @@ app.use('/deleteTest', (req, res) => {
     
     }
     else{
-      console.log("asdsad")
+      //console.log("asdsad")
       pool.query(`DELETE FROM EmployeeTest
     WHERE employeeID='${x[0]}'
     AND testBarcode='${x[1]}'`)
