@@ -4,8 +4,10 @@ import EmployeeHome from './EmployeeHome';
 import TryEmployeeLogin from './TryEmployeeLogin';
 import WellTesting from '../wellTesting/WellTesting';
 import WellAdd from '../wellTesting/WellAdd';
-import LabLogin from '../wellTesting/LabLogin';
 import EditOrDeleteWell from '../wellTesting/EditOrDeleteWell';
+import TestCollection from '../testCollection/TestCollection';
+import TestAdd from '../testCollection/TestAdd';
+import TestDelete from '../testCollection/TestDelete';
 import {
   BrowserRouter as Router,
   Switch,
@@ -21,6 +23,9 @@ import {
 // through the site. This preserves the browser history,
 // making sure things like the back button and bookmarks
 // work properly.
+//<Route exact path="/labtech">
+//<LabLoginPage />
+//</Route>
 
 export default function BasicExample() {
   console.log(window.location.href);
@@ -38,9 +43,6 @@ export default function BasicExample() {
           <Route exact path="/employee">
             <EmployeeLoginPage />
           </Route>
-          <Route exact path="/labtech">
-            <LabLoginPage />
-          </Route>
           <Route path="/EmployeeHome">
             <EmployeeHomePage />
           </Route>
@@ -53,9 +55,17 @@ export default function BasicExample() {
           <Route path="/addWell">
             <WellAddPage />
           </Route>
-
           <Route path="/editOrDelete">
             <EditOrDeleteWellPage />
+          </Route>
+          <Route path="/testCollection">
+            <TestCollectionPage />
+          </Route>
+          <Route path="/addTest">
+            <TestAddPage />
+          </Route>
+          <Route path="/deleteTest">
+            <TestDeletePage />
           </Route>
           <Route path="/">
             <Dashboard />
@@ -72,12 +82,6 @@ export default function BasicExample() {
 function EmployeeLoginPage() {
   return (
     <EmployeeLoginApp></EmployeeLoginApp>
-  );
-}
-
-function LabLoginPage() {
-  return (
-    <LabLogin></LabLogin>
   );
 }
 
@@ -111,6 +115,24 @@ function WellAddPage() {
 function EditOrDeleteWellPage() {
   return (
     <EditOrDeleteWell></EditOrDeleteWell>
+  );
+}
+
+function TestCollectionPage() {
+  return (
+    <TestCollection></TestCollection>
+  );
+}
+
+function TestAddPage() {
+  return (
+    <TestAdd></TestAdd>
+  );
+}
+
+function TestDeletePage() {
+  return (
+    <TestDelete></TestDelete>
   );
 }
 

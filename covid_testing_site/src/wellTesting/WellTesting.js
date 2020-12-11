@@ -23,10 +23,17 @@ class WellTesting extends Component {
 
   componentDidMount(){
     this.callAPI();
-    if(window.location.href!=="http://localhost:3000/wellTest?action=Edit"){
-      console.log(window.location.href.substring(46).split('&')[1])
-      if(window.location.href.substring(46).split('&')[1]==="action=Edit"){
-        var x = window.location.href.substring(46).split('&')[0].split("%2C");
+    console.log(window.location.href)
+    //http://localhost:3000/wellTest?action=Edit&WellPoolResult=1000%2C20%2CIn+Progress
+    //action=Edit&WellPoolResult=1000%2C20%2CIn+Progress  with 31 substring
+    //console.log(window.location.href.split("/")[3])
+    //console.log(window.location.href.split('?')[1].split('&')[0])
+    if(window.location.href.split("/")[3]!=="wellTest?action=Edit"){
+      if(window.location.href.split('?')[1]!==undefined && window.location.href.split('?')[1].split('&')[0]==="action=Edit"){
+        //http://localhost:3000/wellTest?action = Edit&WellPoolResult = 1000  %2C  20  %2C  In+Progress
+        //.split("%2C")
+        var x = window.location.href.split("=")[2].split('%2C');
+        x[2] = x[2].split('&')[0];
         //console.log(x[0])
         if (x[2]==="In+Progress"){
           this.setState({
@@ -48,16 +55,21 @@ class WellTesting extends Component {
           Pool:x[1],
           
         })
+        //console.log(this.state.Well);
+        //console.log(this.state.Pool);
 
       }
     }
   }
 
-  myChangeHandler = (event) => {
-    this.setState({well: event.target.value});
-  }
+  //myChangeHandler = (event) => {
+  //  this.setState({well: event.target.value});
+  //}
 
   render(){
+    if(this.state.members==[]){
+      return(<h1>Loading</h1>);
+    }
     console.log(this.state)
   return (
     <div>
@@ -95,6 +107,20 @@ class WellTesting extends Component {
 
       <form action="/editOrDelete" method="get">
         <ul className="flex-outer">
+        <li>
+      <input
+              type="submit"
+              id="editButton"
+              name="action"
+              value="Edit"
+            ></input>
+            <input
+              type="submit"
+              id="deleteButton"
+              name="action"
+              value="Delete"
+            ></input>
+      </li>
       <li>
     <table className = "tableBorder">
       <thead>
@@ -119,21 +145,8 @@ class WellTesting extends Component {
     </tbody>
     </table>
     </li>
-      <li>
-        
-      </li>
-      <input
-              type="submit"
-              id="editButton"
-              name="action"
-              value="Edit"
-            ></input>
-            <input
-              type="submit"
-              id="deleteButton"
-              name="action"
-              value="Delete"
-            ></input>
+
+   
         </ul>
       </form>
     </div>
