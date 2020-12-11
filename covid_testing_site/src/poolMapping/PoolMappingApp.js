@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import "./CSS/poolMappingStyle.css";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
+import {useLocation} from 'react-router-dom'
 
 class PoolMappingApp extends Component {
   constructor(props) {
@@ -8,30 +12,43 @@ class PoolMappingApp extends Component {
       members: [],
       id: 0,
       Pool: "",
-      TestBarcodes: [{ barcode: "2345" }, { barcode: "2345" }],
+      TestBarcodes: [{ barcode: "" }, { barcode: "" }],
     };
   }
 
-  // callAPI(){
-  //   //console.log(window.location.href.substring(22));
-  //   fetch('http://localhost:9000/'+window.location.href.substring(22))
-  //     .then(res => res.json())
-  //     .then(members => this.setState({ members: members }));
-  //   console.log(this.state)
-  // }
+  callAPI(){
+    fetch("http://localhost:9000/poolMapping")
+      .then(res => res.json())
+      .then(members => this.setState({ members: members }));
+    console.log(this.state)
+  }
 
-  // componentDidMount(){
-  //   this.callAPI();
-  // }
-
-  // myChangeHandler = (event) => {
-  //   this.setState({well: event.target.value});
-  // }
+  componentDidMount(){
+    // const stuff = props.location.state.PoolBarcode;
+    console.log(this.props.location.state);
+    if(this.props.location.state !== undefined && this.props.location.state.PoolBarcode !== undefined)
+    {
+      var pool = this.props.location.state.PoolBarcode;
+      this.setState({ Pool: pool });
+    }
+    if(this.props.location.state !== undefined && this.props.location.state.tBarcodes !== undefined)
+    {
+      var testBarcodes = this.props.location.state.tBarcodes;
+      this.setState({ TestBarcodes: testBarcodes });
+    }
+    this.callAPI();
+  }
 
   handleChangeInput(index, event) {
     const values = [...this.state.TestBarcodes];
     values[index][event.target.name] = event.target.value;
     this.setState({ TestBarcodes: values });
+    this.handleAddField = this.handleAddField.bind(this);
+  }
+
+  handleChangePoolInput(event) {
+    const value = event.target.value;
+    this.setState({ Pool: value });
     this.handleAddField = this.handleAddField.bind(this);
   }
 
@@ -48,25 +65,44 @@ class PoolMappingApp extends Component {
     this.setState({ TestBarcodes: values });
   }
 
+  handleSubmit(event) {
+    console.log("Hit Submit");
+    this.props.history.push({
+      pathname: "/addPool",
+      state: { PoolBarcode: this.state.Pool, tBarcodes: this.state.TestBarcodes }
+    });
+    // event.preventDefault();
+    // return (
+    //   <Redirect
+    //     to={{
+    //       pathname: "/collectLabLogin",
+    //       // state: { age: this.state.age, sex: this.state.sex },
+    //     }}
+    //   />)
+  }
+
   render() {
     console.log(this.state);
     return (
       <div>
         <h1 className="Center">Pool Mapping</h1>
-        <div>
-          <form className="addPool" action="/addPool" method="get">
+        <div className="main">
+          <form action="/addPool" method="get">
             <ul className="flex-outer">
               <li>
                 <label htmlFor="poolBarcode">Pool Barcode:</label>
                 <input
                   type="text"
                   name="poolBarcode"
-                  defaultValue={this.state.Pool}
+                  value={this.state.Pool}
+                  onChange={(event) =>
+                    this.handleChangePoolInput(event)
+                  }
                 ></input>
               </li>
               <li>
                 <label htmlFor="testBarcodes">Test Barcodes:</label>
-                <div>
+                <div className="pool">
                   {this.state.TestBarcodes.map((barcode, index) => (
                     <div className="testBarcodes" key={index}>
                       <input
@@ -92,22 +128,21 @@ class PoolMappingApp extends Component {
                   >
                     Add more rows
                   </button>
+                  <input
+                    type="submit"
+                    id="submitButton"
+                    name="action"
+                    value="Submit Pool"
+                  ></input>
                 </div>
               </li>
-              <li>
-                <input
-                  type="submit"
-                  id="addButton"
-                  name="action"
-                  value="Submit Pool"
-                ></input>
-              </li>
+              <li></li>
             </ul>
           </form>
 
-          <form action="/editOrDelete" method="get">
+          <form action="/editDeletePool" method="get">
             <ul className="flex-outer">
-              <li>
+              <li style={{ marginTop: "1%" }}>
                 <table className="tableBorder">
                   <thead>
                     <tr key={0}>
@@ -122,18 +157,17 @@ class PoolMappingApp extends Component {
                           <input
                             className="box"
                             type="checkbox"
-                            id={member.PoolBarcode}
+                            id={member.pool}
                             name="PoolBarcodes"
                             value={
-                              member.PoolBarcode + "," + member.TestBarcodes
+                              member.pool
                             }
                           ></input>
-                          <label htmlFor={member.PoolBarcode} className="cell">
-                            {member.TestBarcodes}
+                          <label htmlFor={member.pool} className="cell">
+                            {member.pool}
                           </label>
                         </td>
-                        <td className="cellBorder">{member.PoolBarcode}</td>
-                        <td className="cellBorder">{member.result}</td>
+                        <td className="cellBorder">{member.testCodes.toString()}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -160,4 +194,4 @@ class PoolMappingApp extends Component {
   }
 }
 
-export default PoolMappingApp;
+export default withRouter(PoolMappingApp);

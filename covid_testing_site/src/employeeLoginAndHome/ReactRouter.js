@@ -6,9 +6,9 @@ import WellTesting from '../wellTesting/WellTesting';
 import WellAdd from '../wellTesting/WellAdd';
 import LoginApp from '../collectorLabLogin/LoginApp';
 import LabHomeApp from '../labHome/LabHomeApp';
-import TryLoginPage from '../collectorLabLogin/TryLabLogin';
 import TestCollection from '../testCollection/TestCollection';
-import poolMappingApp from "../poolMapping/PoolMappingApp";
+import EditPool from "../poolMapping/EditPool";
+import AddPool from "../poolMapping/AddPool";
 
 import EditOrDeleteWell from '../wellTesting/EditOrDeleteWell';
 import TryLabLogin from '../collectorLabLogin/TryLabLogin';
@@ -47,6 +47,12 @@ export default function BasicExample() {
           </Route>
           <Route path="/poolMapping">
             <PoolMappingPage />
+          </Route>
+          <Route path="/editDeletePool">
+            <EditPoolMappingPage />
+          </Route>
+          <Route path="/addPool">
+            <AddPoolMappingPage />
           </Route>
           <Route path="/EmployeeHome">
             <EmployeeHomePage />
@@ -114,6 +120,18 @@ function TryLoginAppPage() {
 function PoolMappingPage() {
   return (
     <PoolMappingApp></PoolMappingApp>
+  );
+}
+
+function EditPoolMappingPage() {
+  return (
+    <EditPool></EditPool>
+  );
+}
+
+function AddPoolMappingPage() {
+  return (
+    <AddPool></AddPool>
   );
 }
 

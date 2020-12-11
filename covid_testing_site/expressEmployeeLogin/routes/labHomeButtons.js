@@ -15,7 +15,7 @@ router.get("/",function(req,res,next){
           <form class="form-inline" action="/testCollection">
             <button type="submit">Test Collection</button>
           </form>
-          <form class="form-inline" action="">
+          <form class="form-inline" action="/poolMapping">
             <button type="submit">Pool Mapping</button>
           </form>
           <form class="form-inline" action="/wellTest" method="get">
