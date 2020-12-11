@@ -4,16 +4,22 @@ import EmployeeHome from './EmployeeHome';
 import TryEmployeeLogin from './TryEmployeeLogin';
 import WellTesting from '../wellTesting/WellTesting';
 import WellAdd from '../wellTesting/WellAdd';
-import EditOrDeleteWell from '../wellTesting/EditOrDeleteWell';
+import LoginApp from '../labTech/LoginApp';
+import LabHomeApp from '../labHome/LabHomeApp';
 import TestCollection from '../testCollection/TestCollection';
+import EditPool from "../poolMapping/EditPool";
+import AddPool from "../poolMapping/AddPool";
 import TestAdd from '../testCollection/TestAdd';
 import TestDelete from '../testCollection/TestDelete';
+import EditOrDeleteWell from '../wellTesting/EditOrDeleteWell';
+import TryLabLogin from '../labTech/TryLabLogin';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link
 } from "react-router-dom";
+import PoolMappingApp from "../poolMapping/PoolMappingApp";
 //npm install react-router-dom  was used.
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
@@ -43,8 +49,26 @@ export default function BasicExample() {
           <Route exact path="/employee">
             <EmployeeLoginPage />
           </Route>
+          <Route path="/poolMapping">
+            <PoolMappingPage />
+          </Route>
+          <Route path="/editDeletePool">
+            <EditPoolMappingPage />
+          </Route>
+          <Route path="/addPool">
+            <AddPoolMappingPage />
+          </Route>
           <Route path="/EmployeeHome">
             <EmployeeHomePage />
+          </Route>
+          <Route exact path="/labtech">
+            <LoginPage />
+          </Route>
+          <Route path="/labHomeButtons">
+            <LabHomePage />
+          </Route>
+          <Route path="/mainLogin">
+            <TryLoginAppPage />
           </Route>
           <Route path="/login">
             <TryEmployeeLoginPage />
@@ -85,11 +109,51 @@ function EmployeeLoginPage() {
   );
 }
 
+function LoginPage() {
+  return (
+    <LoginApp></LoginApp>
+  );
+}
+
+function LabHomePage() {
+  return (
+    <LabHomeApp></LabHomeApp>
+  );
+}
+
+function TryLoginAppPage() {
+  return (
+    <TryLabLogin></TryLabLogin>
+  );
+}
+
+function PoolMappingPage() {
+  return (
+    <PoolMappingApp></PoolMappingApp>
+  );
+}
+
+function EditPoolMappingPage() {
+  return (
+    <EditPool></EditPool>
+  );
+}
+
+function AddPoolMappingPage() {
+  return (
+    <AddPool></AddPool>
+  );
+}
+
 function EmployeeHomePage() {
-  console.log("hello");
+  //console.log("hello");
   return (
     <EmployeeHome></EmployeeHome>
   );
+}
+
+function TestCollectionPage() {  
+  return ( <TestCollection></TestCollection>  );
 }
 
 function TryEmployeeLoginPage() {
@@ -115,12 +179,6 @@ function WellAddPage() {
 function EditOrDeleteWellPage() {
   return (
     <EditOrDeleteWell></EditOrDeleteWell>
-  );
-}
-
-function TestCollectionPage() {
-  return (
-    <TestCollection></TestCollection>
   );
 }
 

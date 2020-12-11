@@ -4,7 +4,7 @@ router.get("/",function(req,res,next){
   res.send(
     `<div className="App">
     <body>
-      <form class="login" action="" method="post">
+      <form class="login" action="/login" method="get">
         <ul class="flex-outer">
           <li>
             <h1>Employee Login Page for Results</h1>
