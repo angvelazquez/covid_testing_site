@@ -4,14 +4,15 @@ import EmployeeHome from './EmployeeHome';
 import TryEmployeeLogin from './TryEmployeeLogin';
 import WellTesting from '../wellTesting/WellTesting';
 import WellAdd from '../wellTesting/WellAdd';
-import LoginApp from '../collectorLabLogin/LoginApp';
+import LoginApp from '../labTech/LoginApp';
 import LabHomeApp from '../labHome/LabHomeApp';
 import TestCollection from '../testCollection/TestCollection';
 import EditPool from "../poolMapping/EditPool";
 import AddPool from "../poolMapping/AddPool";
-
+import TestAdd from '../testCollection/TestAdd';
+import TestDelete from '../testCollection/TestDelete';
 import EditOrDeleteWell from '../wellTesting/EditOrDeleteWell';
-import TryLabLogin from '../collectorLabLogin/TryLabLogin';
+import TryLabLogin from '../labTech/TryLabLogin';
 import {
   BrowserRouter as Router,
   Switch,
@@ -28,6 +29,9 @@ import PoolMappingApp from "../poolMapping/PoolMappingApp";
 // through the site. This preserves the browser history,
 // making sure things like the back button and bookmarks
 // work properly.
+//<Route exact path="/labtech">
+//<LabLoginPage />
+//</Route>
 
 export default function BasicExample() {
   console.log(window.location.href);
@@ -57,7 +61,7 @@ export default function BasicExample() {
           <Route path="/EmployeeHome">
             <EmployeeHomePage />
           </Route>
-          <Route exact path="/collectLabLogin">
+          <Route exact path="/labtech">
             <LoginPage />
           </Route>
           <Route path="/labHomeButtons">
@@ -79,7 +83,13 @@ export default function BasicExample() {
             <EditOrDeleteWellPage />
           </Route>
           <Route path="/testCollection">
-            <TestCollectionPage />          
+            <TestCollectionPage />
+          </Route>
+          <Route path="/addTest">
+            <TestAddPage />
+          </Route>
+          <Route path="/deleteTest">
+            <TestDeletePage />
           </Route>
           <Route path="/">
             <Dashboard />
@@ -136,14 +146,14 @@ function AddPoolMappingPage() {
 }
 
 function EmployeeHomePage() {
-  console.log("hello");
+  //console.log("hello");
   return (
     <EmployeeHome></EmployeeHome>
   );
 }
 
 function TestCollectionPage() {  
-  return (    <TestCollection></TestCollection>  );
+  return ( <TestCollection></TestCollection>  );
 }
 
 function TryEmployeeLoginPage() {
@@ -169,6 +179,18 @@ function WellAddPage() {
 function EditOrDeleteWellPage() {
   return (
     <EditOrDeleteWell></EditOrDeleteWell>
+  );
+}
+
+function TestAddPage() {
+  return (
+    <TestAdd></TestAdd>
+  );
+}
+
+function TestDeletePage() {
+  return (
+    <TestDelete></TestDelete>
   );
 }
 

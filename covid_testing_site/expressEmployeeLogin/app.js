@@ -16,7 +16,7 @@ dotenv.config({ path: __dirname + "/.env" });
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 var employeeLogin = require("./routes/employeeLogin");
-var collectLabLogin = require("./routes/collectLabLogin");
+var labTech = require("./routes/labTech");
 var labHomeButtons = require("./routes/labHomeButtons");
 const e = require("express");
 // var labLogin = require("./routes/labLogin");
@@ -59,7 +59,7 @@ pool.connect((error) => {
   }
 });
 
-console.log("hmmm");
+//console.log("hmmm");
 //pool.query(`select * from ${table}`)
 //    .then(res => {
 //      console.log(JSON.stringify(res));
@@ -80,13 +80,13 @@ app.use(express.static(path.join(__dirname, "/styles")));
 // app.use('/', indexRouter);
 // app.use('/blah', usersRouter);
 app.use("/employeeLogin", employeeLogin);
-app.use("/collectLabLogin", collectLabLogin);
+app.use("/labTech", labTech);
 app.use("/labHomeButtons", labHomeButtons);
 // app.use('/labLogin', labLogin);
 app.use("/employeeHome", (req, res) => {
   let query = url.parse(req.url, true).query;
-  console.log(query.email);
-  console.log(query.password);
+  //console.log(query.email);
+  //console.log(query.password);
   //if(query.email!=null){
   //if(query.email!='*'){
   //if(query.password!=null){
@@ -280,22 +280,6 @@ app.use("/editDeletePool", (req, res) => {
   }
 });
 
-// app.use("/editPool", (req, res) => {
-//   let poolBarcode = req.body.poolBarcode;
-//   let testBarCodes = req.body.testBarCodes;
-//   pool.query(
-//     `DELETE FROM PoolMap poolBarcode
-//   WHERE poolBarcode = "${poolBarcode}";`);
-//   for(var i = 0; i < testBarCodes.length; i++)
-//   {
-//     pool.query(
-//       `DELETE FROM PoolMap testBarCode
-//     WHERE testBarCode = "${testBarCodes[i]}";`);
-//   }
-//   var send = {pool: poolBarcode, test: testBarCodes};
-//   res.send(send);
-// });
-
 app.use("/wellTest", (req, res) => {
   let query = url.parse(req.url, true).query;
   console.log(query);
@@ -310,9 +294,6 @@ app.use("/wellTest", (req, res) => {
 
 app.use("/addWell", (req, res) => {
   let query = url.parse(req.url, true).query;
-  console.log(query.wellBarcode);
-  console.log(query.action);
-  //addwell check for action?
   console.log(query.result);
   if (query.result === "In+Progress") {
     query.result = "In Progress";
@@ -321,7 +302,7 @@ app.use("/addWell", (req, res) => {
     `INSERT INTO WellTesting (poolBarcode, wellBarcode, testingStartTime, testingEndTime, result) 
   values ("${query.poolBarcode}","${query.wellBarcode}","2020-11-18 11:47:30", "2020-11-25 11:47:30","${query.result}")`,
     (error, data, fields) => {
-      meep = blah;
+      meep = data;
       console.log(meep);
       res.send(meep);
     }
@@ -356,7 +337,7 @@ app.use("/editOrDelete", (req, res) => {
   AND poolBarcode='${x[1]}'
   AND result='${x[2]}'`,
       (error, data, fields) => {
-        meep = blah;
+        meep = data;
         console.log(meep);
         if (typeof query.WellPoolResult == "string") {
           pool.query(`DELETE FROM WellTesting
@@ -405,8 +386,8 @@ app.use("/testCollection", (req, res) => {
 
 app.use("/addTest", (req, res) => {
   let query = url.parse(req.url, true).query;
-  console.log(query.employeeID);
-  console.log(query.testBarcode);
+  //console.log(query.employeeID);
+  //console.log(query.testBarcode);
   var x = new Date();
   var y = "";
   y +=
@@ -424,7 +405,7 @@ app.use("/addTest", (req, res) => {
   //addwell check for action?
   pool.query(
     `INSERT INTO EmployeeTest (testBarcode, employeeID, collectionTime, collectedBy) 
-  values ("${query.testBarcode}","${query.employeeID}","${y}","L1")`,
+  values ("${query.testBarcode}","${query.employeeID}","${y}","L27804")`,
     (error, blah, fields) => {
       meep = blah;
       console.log(meep);
@@ -488,3 +469,4 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
