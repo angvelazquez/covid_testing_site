@@ -38,7 +38,7 @@ class TryLabLogin extends Component {
       );
     } else {
       return (
-        <Redirect to="/collectLabLogin" />
+        <Redirect to="/labtech" />
       );
     }
   }

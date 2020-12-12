@@ -8,7 +8,7 @@ class LoginApp extends Component {
   }
 
   callAPI(){
-    fetch("http://localhost:9000/collectLabLogin")
+    fetch("http://localhost:9000/labtech")
       .then(res => res.text())
       .then(res => this.setState({apiResponse: res}))
       .catch(err => err);

@@ -184,12 +184,34 @@ app.use("/poolMapping", (req, res) => {
   });
 });
 
-app.use("/addPool", (req, res) => {
+const query1 = util.promisify(pool.query).bind(pool);
+newPool = async (poolBarcode) => {
+  try {
+    const pool = await query1(
+      `SELECT * FROM covid.Pool WHERE poolBarcode = "${poolBarcode}";`
+    );
+
+    if (!pool.length) {
+      const newPool = await query1(
+        `INSERT INTO Pool VALUES ("${poolBarcode}");`
+      );
+      console.log("Added new pool: " + newPool);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+app.use("/addPool", async (req, res) => {
   let query = url.parse(req.url, true).query;
   console.log(query);
   let poolBarcode = query.poolBarcode;
   let testBarCodes = query.barcode;
+  console.log("Function");
+  await newPool(poolBarcode);
+  console.log("After function");
   if (typeof testBarCodes === "string") {
+    console.log("String")
     pool.query(
       `INSERT INTO PoolMap (testBarCode, poolBarcode) 
         values ("${testBarCodes}","${poolBarcode}")`
@@ -197,6 +219,7 @@ app.use("/addPool", (req, res) => {
     res.json({ valid: "0" });
   } else {
     for (var i = 0; i < testBarCodes.length; i++) {
+      console.log("array")
       pool.query(
         `INSERT INTO PoolMap (testBarCode, poolBarcode) 
     values ("${testBarCodes[i]}","${poolBarcode}")`
@@ -292,12 +315,31 @@ app.use("/wellTest", (req, res) => {
   );
 });
 
-app.use("/addWell", (req, res) => {
+const query2 = util.promisify(pool.query).bind(pool);
+newWell = async (wellBarcode) => {
+  try {
+    const well = await query2(
+      `SELECT * FROM covid.Well WHERE wellBarcode = "${wellBarcode}";`
+    );
+
+    if (!well.length) {
+      const newWell = await query2(
+        `INSERT INTO Well VALUES ("${wellBarcode}");`
+      );
+      console.log("New Well: " + newWell);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+app.use("/addWell", async (req, res) => {
   let query = url.parse(req.url, true).query;
   console.log(query.result);
   if (query.result === "In+Progress") {
     query.result = "In Progress";
   }
+  await newWell(query.wellBarcode);
   pool.query(
     `INSERT INTO WellTesting (poolBarcode, wellBarcode, testingStartTime, testingEndTime, result) 
   values ("${query.poolBarcode}","${query.wellBarcode}","2020-11-18 11:47:30", "2020-11-25 11:47:30","${query.result}")`,
@@ -414,9 +456,25 @@ app.use("/addTest", (req, res) => {
   );
 });
 
-app.use("/deleteTest", (req, res) => {
-  let query = url.parse(req.url, true).query;
+const query3 = util.promisify(pool.query).bind(pool);
+canDelete = async (testBarcode) => {
+  try {
+    const testTable = await query3(
+      `SELECT * FROM covid.PoolMap WHERE testBarCode = "${testBarcode}";`
+    );
 
+    if (!testTable.length) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+app.use("/deleteTest", async (req, res) => {
+  let query = url.parse(req.url, true).query;
   var x = query.IdBarcode;
   console.log(x);
   if (x == null) {
@@ -438,15 +496,21 @@ app.use("/deleteTest", (req, res) => {
     for (i = 0; i < x.length; i++) {
       y = x[i].split(",");
       console.log(y);
-      pool.query(`DELETE FROM EmployeeTest
+      var checkDelete = await canDelete(y[1]);
+      if (checkDelete) {
+        pool.query(`DELETE FROM EmployeeTest
     WHERE employeeID='${y[0]}'
     AND testBarcode='${y[1]}'`);
+      }
     }
   } else {
     console.log("asdsad");
-    pool.query(`DELETE FROM EmployeeTest
+    var checkDelete = await canDelete(x[1]);
+    if (checkDelete) {
+      pool.query(`DELETE FROM EmployeeTest
     WHERE employeeID='${x[0]}'
     AND testBarcode='${x[1]}'`);
+    }
   }
 
   res.send([]);
