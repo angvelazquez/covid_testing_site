@@ -33,7 +33,7 @@ class TestCollection extends Component {
       console.log(this.state)
     return (
       <div>
-      <h1 className="Center">Well Testing</h1>
+      <h1 className="Center">Test Collection</h1>
       <div>
       <form className="addWell" action="/addTest" method="get">
           <ul className="flex-outer">
